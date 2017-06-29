@@ -1,0 +1,26 @@
+{
+  "name": "react-form-validators",
+  "version": "1.0.0",
+  "description": "form validators for react applications",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimmy-james/react-form-validators.git"
+  },
+  "keywords": [
+    "react",
+    "form",
+    "validation",
+    "forms",
+    "validator"
+  ],
+  "author": "jimbot <jimkim777@gmail.com> (http://www.jameskim.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jimmy-james/react-form-validators/issues"
+  },
+  "homepage": "https://github.com/jimmy-james/react-form-validators#readme"
+}
