@@ -1,13 +1,19 @@
 'use strict';
 
 module.exports = {
-  minimumLen: minimumLen
+  minimumLen: minimumLen,
+  containsWhiteSpace: containsWhiteSpace,
+  containsTrailingSpace: containsTrailingSpace,
+  isRequired: isRequired,
+  isNotANumber: isNotANumber
 };
 
 const errorMessages = {
   too_short: 'is too short',
   white_space: 'must not contain spaces',
   trailing_space: 'must not begin with a space',
+  required: 'is required',
+  not_a_number: 'is not a number'
 };
 
 const minimumLen = (input, num) => {
@@ -27,4 +33,18 @@ const containsTrailingSpace = input => {
     null
 };
 
-const
+const isRequired = input => {
+  return !input ?
+    errorMessages.required :
+    null
+};
+
+const isNotANumber = num => {
+  return isNaN(num) ?
+    errorMessages.not_a_number :
+    null
+};
+
+const isNotInRange = (num, range) => {
+  
+};
