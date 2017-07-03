@@ -1,4 +1,19 @@
 'use strict';
+/*
+* remember to validate for special characters
+* validate for case-sensitivity
+* validate password
+* create a config option for messages, special characters, etc
+* accomodate project/application/company name exists
+* email validation
+* phone number for international
+* major credit cards
+* quantity
+* currency
+* timezone
+* excluded strings or items or codes
+* create user/password
+* */
 
 const errorMessages = {
   too_short: 'is too short',
@@ -7,8 +22,8 @@ const errorMessages = {
   required: 'is required',
   not_a_number: 'is not a number',
   not_in_range: 'is not in range',
-  user_exists_input_error: 'userAlreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
-  user_exists: 'already exists'
+  exists_input_error: 'alreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
+  exists: 'already exists'
 };
 
 /* validation methods */
@@ -22,6 +37,7 @@ const minimumLen = (input, minLen) => {
 const containsWhiteSpace = input => (
   /\s/g.test(input)
 );
+
 const containsTrailingSpace = input => {
   return (input[ 0 ] === ' ') && (input.length > 0) ?
     messages.trailing_space :
@@ -46,12 +62,12 @@ const isNotInRange = (num, rangeArray) => {
     null
 };
 
-/* helper methods for userAlreadyExists */
-const validateArrays = (input, users) => {
+/* helper methods for alreadyExists */
+const validateArrays = (input, data, label) => {
   let msg = null;
-  var recurse = function(array, obj) {
-    if (obj && obj.name && !Array.isArray(obj) && obj.name.toLowerCase().trim() === input.toLowerCase().trim() || obj && obj.username && !Array.isArray(obj) && obj.username.toLowerCase().trim() === input.toLowerCase().trim()) {
-      msg = errorMessages.user_exists;
+  var recurse = function(array, item) {
+    if (item && item[label] && !Array.isArray(item) && item[label].toLowerCase().trim() === input.toLowerCase().trim()) {
+      msg = errorMessages.exists;
       return;
     }
     for (let i = 0; i < array.length; i++) {
@@ -60,43 +76,40 @@ const validateArrays = (input, users) => {
       }
     }
   };
-  for (let x = 0; x < users.length; x++) {
-    recurse(users[x], null);
+  for (let x = 0; x < data.length; x++) {
+    recurse(data[x], null);
   }
   return msg;
 };
 
-const validateArrayOfObjects = (input, users) => {
-  for (let i = 0; i < users.length; i++) {
-    if (typeof users[i] === 'object' && users[i].name && users[i].name.toLowerCase().trim() === input.toLowerCase().trim()) {
-      return errorMessages.user_exists;
-    }
-    if (typeof users[i] === 'object' && users[i].username && users[i].username.toLowerCase().trim() === input.toLowerCase().trim()) {
-      return errorMessages.user_exists;
+const validateArrayOfObjects = (input, data, label) => {
+  for (let i = 0; i < data.length; i++) {
+    if (typeof data[i] === 'object' && data[i][label] && data[i][label].toLowerCase().trim() === input.toLowerCase().trim()) {
+      return errorMessages.exists;
     }
   }
   return null;
 };
 
-const validateArrayOfStrings = (input, users) => {
-  for (let i = 0; i < users.length; i++) {
-    if (users[i].toLowerCase().trim() === input.toLowerCase().trim()) {
-      return errorMessages.user_exists;
+const validateArrayOfStrings = (input, data) => {
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].toLowerCase().trim() === input.toLowerCase().trim()) {
+      return errorMessages.exists;
     }
   }
   return null;
 };
 
-const userAlreadyExists = (input, users) => {
-  if (Array.isArray(users)) {
-    if (Array.isArray(users[0])) {
-      return validateArrays(input, users);
+const alreadyExists = (input, data, config) => {
+  if (Array.isArray(data)) {
+    if (Array.isArray(data[0])) {
+      return validateArrays(input, data, config.inputLabelName);
     }
-    else if (typeof users[0] === 'object') {
-      return validateArrayOfObjects(input, users);
+    else if (typeof data[0] === 'object') {
+      return validateArrayOfObjects(input, data, config.inputLabelName);
     }
-    else if (typeof users[0] === 'string') {
-      return validateArrayOfStrings(users);
+    else if (typeof data[0] === 'string') {
+      return validateArrayOfStrings(input, data);
     }
   }
   else {
@@ -111,7 +124,6 @@ module.exports = {
   isRequired: isRequired,
   isNotANumber: isNotANumber,
   isNotInRange: isNotInRange,
-  userAlreadyExists: userAlreadyExists
+  alreadyExists: alreadyExists
 };
-
 
