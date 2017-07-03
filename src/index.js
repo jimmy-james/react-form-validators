@@ -1,6 +1,5 @@
 'use strict';
 
-
 const errorMessages = {
   too_short: 'is too short',
   white_space: 'must not contain spaces',
@@ -12,14 +11,12 @@ const errorMessages = {
   user_exists: 'already exists'
 };
 
-
 /* validation methods */
 const minimumLen = (input, minLen) => {
   let len = input.length;
   return (len > 0) && (len < minLen) ?
     errorMessages.too_short :
     null;
-
 };
 
 const containsWhiteSpace = input => (
@@ -53,7 +50,7 @@ const isNotInRange = (num, rangeArray) => {
 const validateArrays = (input, users) => {
   let msg = null;
   var recurse = function(array, obj) {
-    if (obj && obj.name && !Array.isArray(obj) && obj.name.toLowerCase() === input.toLowerCase() || obj && obj.username && !Array.isArray(obj) && obj.username.toLowerCase() === input.toLowerCase()) {
+    if (obj && obj.name && !Array.isArray(obj) && obj.name.toLowerCase().trim() === input.toLowerCase().trim() || obj && obj.username && !Array.isArray(obj) && obj.username.toLowerCase().trim() === input.toLowerCase().trim()) {
       msg = errorMessages.user_exists;
       return;
     }
@@ -69,12 +66,25 @@ const validateArrays = (input, users) => {
   return msg;
 };
 
-const validateArrayOfObjects = users => {
-
+const validateArrayOfObjects = (input, users) => {
+  for (let i = 0; i < users.length; i++) {
+    if (typeof users[i] === 'object' && users[i].name && users[i].name.toLowerCase().trim() === input.toLowerCase().trim()) {
+      return errorMessages.user_exists;
+    }
+    if (typeof users[i] === 'object' && users[i].username && users[i].username.toLowerCase().trim() === input.toLowerCase().trim()) {
+      return errorMessages.user_exists;
+    }
+  }
+  return null;
 };
 
-const validateArrayOfStrings = users => {
-
+const validateArrayOfStrings = (input, users) => {
+  for (let i = 0; i < users.length; i++) {
+    if (users[i].toLowerCase().trim() === input.toLowerCase().trim()) {
+      return errorMessages.user_exists;
+    }
+  }
+  return null;
 };
 
 const userAlreadyExists = (input, users) => {
@@ -83,7 +93,7 @@ const userAlreadyExists = (input, users) => {
       return validateArrays(input, users);
     }
     else if (typeof users[0] === 'object') {
-      return validateArrayOfObjects(users);
+      return validateArrayOfObjects(input, users);
     }
     else if (typeof users[0] === 'string') {
       return validateArrayOfStrings(users);
