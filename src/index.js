@@ -1,14 +1,5 @@
 'use strict';
 
-module.exports = {
-  minimumLen: minimumLen,
-  containsWhiteSpace: containsWhiteSpace,
-  containsTrailingSpace: containsTrailingSpace,
-  isRequired: isRequired,
-  isNotANumber: isNotANumber,
-  isNotInRange: isNotInRange,
-  userAlreadyExists: userAlreadyExists
-};
 
 const errorMessages = {
   too_short: 'is too short',
@@ -17,21 +8,10 @@ const errorMessages = {
   required: 'is required',
   not_a_number: 'is not a number',
   not_in_range: 'is not in range',
-  user_exists_input_error: 'userAlreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings'
+  user_exists_input_error: 'userAlreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
+  user_exists: 'already exists'
 };
 
-/* helper methods for nameAlreadyExists */
-const validateArrays = users => {
-
-};
-
-const validateArrayOfObjects = users => {
-
-};
-
-const validateArrayOfStrings = users => {
-
-};
 
 /* validation methods */
 const minimumLen = (input, minLen) => {
@@ -69,10 +49,38 @@ const isNotInRange = (num, rangeArray) => {
     null
 };
 
+/* helper methods for userAlreadyExists */
+const validateArrays = (input, users) => {
+  let msg = null;
+  var recurse = function(array, obj) {
+    if (obj && obj.name && !Array.isArray(obj) && obj.name.toLowerCase() === input.toLowerCase() || obj && obj.username && !Array.isArray(obj) && obj.username.toLowerCase() === input.toLowerCase()) {
+      msg = errorMessages.user_exists;
+      return;
+    }
+    for (let i = 0; i < array.length; i++) {
+      if (array[i]) {
+        recurse(array[i], array[i]);
+      }
+    }
+  };
+  for (let x = 0; x < users.length; x++) {
+    recurse(users[x], null);
+  }
+  return msg;
+};
+
+const validateArrayOfObjects = users => {
+
+};
+
+const validateArrayOfStrings = users => {
+
+};
+
 const userAlreadyExists = (input, users) => {
   if (Array.isArray(users)) {
     if (Array.isArray(users[0])) {
-      return validateArrays(users);
+      return validateArrays(input, users);
     }
     else if (typeof users[0] === 'object') {
       return validateArrayOfObjects(users);
@@ -86,5 +94,14 @@ const userAlreadyExists = (input, users) => {
   }
 };
 
+module.exports = {
+  minimumLen: minimumLen,
+  containsWhiteSpace: containsWhiteSpace,
+  containsTrailingSpace: containsTrailingSpace,
+  isRequired: isRequired,
+  isNotANumber: isNotANumber,
+  isNotInRange: isNotInRange,
+  userAlreadyExists: userAlreadyExists
+};
 
 
