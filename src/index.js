@@ -27,9 +27,9 @@ const errorMessages = {
 };
 
 /* validation methods */
-const minimumLen = (input, minLen) => {
+const minimumLen = (input, config) => {
   let len = input.length;
-  return (len > 0) && (len < minLen) ?
+  return (len > 0) && (len < config.min) ?
     errorMessages.too_short :
     null;
 };
@@ -41,25 +41,25 @@ const containsWhiteSpace = input => (
 const containsTrailingSpace = input => {
   return (input[ 0 ] === ' ') && (input.length > 0) ?
     messages.trailing_space :
-    null
+    null;
 };
 
 const isRequired = input => {
   return !input ?
     errorMessages.required :
-    null
+    null;
 };
 
 const isNotANumber = num => {
   return isNaN(num) ?
     errorMessages.not_a_number :
-    null
+    null;
 };
 
-const isNotInRange = (num, rangeArray) => {
-  return (num < rangeArray[0]) || (num > rangeArray[1]) ?
+const isNotInRange = (num, config) => {
+  return (num < config.min) || (num > config.max) ?
     errorMessages.not_in_range :
-    null
+    null;
 };
 
 /* helper methods for alreadyExists */
@@ -99,6 +99,7 @@ const validateArrayOfStrings = (input, data) => {
   }
   return null;
 };
+/* END OF alreadyExists helper methods */
 
 const alreadyExists = (input, data, config) => {
   if (Array.isArray(data)) {
@@ -118,6 +119,7 @@ const alreadyExists = (input, data, config) => {
 };
 
 module.exports = {
+  errorMessages: errorMessages,
   minimumLen: minimumLen,
   containsWhiteSpace: containsWhiteSpace,
   containsTrailingSpace: containsTrailingSpace,
