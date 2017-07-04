@@ -4,6 +4,7 @@
 * validate for case-sensitivity
 * validate password
 * create a config option for messages, special characters, etc
+* if no config object?
 * accomodate project/application/company name exists
 * email validation
 * phone number for international
@@ -40,7 +41,7 @@ const containsWhiteSpace = input => (
 
 const containsTrailingSpace = input => {
   return (input[ 0 ] === ' ') && (input.length > 0) ?
-    messages.trailing_space :
+    errorMessages.trailing_space :
     null;
 };
 
@@ -114,7 +115,7 @@ const alreadyExists = (input, data, config) => {
     }
   }
   else {
-    throw errorMessages.user_exists_input_error;
+    console.error(errorMessages.user_exists_input_error);
   }
 };
 
