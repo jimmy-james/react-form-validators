@@ -26,7 +26,7 @@ describe('minimumLen method', () => {
   }
 });
 
-describe('containsWhiteSpace', () => {
+describe('containsWhiteSpace method', () => {
   let input = 'tes t';
   it('should return a message', () => {
     expect(validators.containsWhiteSpace(input)).to.equal(true);
@@ -36,7 +36,7 @@ describe('containsWhiteSpace', () => {
   });
 });
 
-describe('containsTrailingSpace', () => {
+describe('containsTrailingSpace method', () => {
   let text = ' test';
   it('should return a message', () => {
     expect(validators.containsTrailingSpace(text)).to.equal(messages.trailing_space);
@@ -46,7 +46,7 @@ describe('containsTrailingSpace', () => {
   });
 });
 
-describe('isNotANumber', () => {
+describe('isNotANumber method', () => {
   let num = 1;
   it('should return a message', () => {
     expect(validators.isNotANumber('string')).to.equal(messages.not_a_number);
@@ -56,7 +56,7 @@ describe('isNotANumber', () => {
   });
 });
 
-describe('isNotInRange', () => {
+describe('isNotInRange method', () => {
   let lowNum = 1,
     midNum = 3,
     highNum = 7,
@@ -72,5 +72,83 @@ describe('isNotInRange', () => {
   });
   it('should return null', () => {
     expect(validators.isNotInRange(midNum, config)).to.equal(null);
+  });
+});
+
+describe('alreadyExists method', () => {
+  let input = 'richard',
+    input2 = 'gavin',
+    input3 = ' richard',
+    input4 = 'richard ',
+    arrayOfArrays = [
+      [
+        {
+          name: 'richard'
+        },
+        {
+          name: 'jan'
+        },
+        {
+          name: 'ann'
+        }
+      ]
+    ],
+    arrayOfObjects = [
+      {
+        username: 'jan'
+      },
+      {
+        username: 'richard'
+      }
+    ],
+    arrayOfStrings = [
+      'jill',
+      'jack',
+      'richard'
+    ];
+  const nameConfig = {
+    inputLabelName: 'name'
+  };
+  const usernameConfig = {
+    inputLabelName: 'username'
+  };
+  it('should return message when input exists in multi-dimensional array data', () => {
+    expect(validators.alreadyExists(input, arrayOfArrays, nameConfig)).to.equal(messages.exists);
+  });
+  it('should return message when input exists in array of objects data', () => {
+    expect(validators.alreadyExists(input, arrayOfObjects, usernameConfig)).to.equal(messages.exists);
+  });
+  it('should return message when input exists in array of strings data', () => {
+    expect(validators.alreadyExists(input, arrayOfStrings)).to.equal(messages.exists);
+  });
+  it('should return null when input does not exist in multi-dimensional array', () => {
+    expect(validators.alreadyExists(input2, arrayOfArrays, nameConfig)).to.equal(null);
+  });
+  it('should return null when input does not exist in array of objects', () => {
+    expect(validators.alreadyExists(input2, arrayOfObjects, usernameConfig)).to.equal(null);
+  });
+  it('should return null when input does not exist in array of strings', () => {
+    expect(validators.alreadyExists(input2, arrayOfStrings)).to.equal(null);
+  });
+  it('should return message when input exists in multi-dimensional array data and there is leading/trailing white-space in the input', () => {
+    expect(validators.alreadyExists(input3, arrayOfArrays, nameConfig)).to.equal(messages.exists);
+    expect(validators.alreadyExists(input4, arrayOfArrays, nameConfig)).to.equal(messages.exists);
+
+  });
+  it('should return message when input exists in array of objects data and there is leading/trailing white-space in the input', () => {
+    expect(validators.alreadyExists(input3, arrayOfObjects, usernameConfig)).to.equal(messages.exists);
+    expect(validators.alreadyExists(input4, arrayOfObjects, usernameConfig)).to.equal(messages.exists);
+
+  });
+  it('should return message when input exists in array of strings data and there is leading/trailing white-space in the input', () => {
+    expect(validators.alreadyExists(input3, arrayOfStrings)).to.equal(messages.exists);
+    expect(validators.alreadyExists(input4, arrayOfStrings)).to.equal(messages.exists);
+
+  });
+  it('should log an error message if the config object does not correctly specify inputLabelName for multi-dimensional array data', () => {
+
+  });
+  it('should log an error message if the config object does not correctly specify inputLabelName for array of objects data', () => {
+
   });
 });
