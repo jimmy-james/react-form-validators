@@ -17,13 +17,20 @@ describe('minimumLen method', () => {
   let config = {
     min: 7
   },
-    input = '';
-  for (let i = 0; i < 6; i++) {
-    input += 'i';
-    it('should return a message', () => {
+    input = '',
+    input2 = 'asdfas';
+  it('should return a message when input is less than minimum length', () => {
+    for (let i = 0; i < 6; i++) {
+      input += 'i';
       expect(validators.minimumLen(input, config)).to.equal(messages.too_short);
-    });
-  }
+    }
+  });
+  it('should return null when input is equal to or greater than minimum length', () => {
+    for (let x = 0; x < 1; x++) {
+      input2 += 'x';
+      expect(validators.minimumLen(input2, config)).to.equal(null);
+    }
+  });
 });
 
 describe('containsWhiteSpace method', () => {
@@ -149,6 +156,9 @@ describe('alreadyExists method', () => {
 
   });
   it('should log an error message if the config object does not correctly specify inputLabelName for array of objects data', () => {
+
+  });
+  it('should not be case-sensitive', () => {
 
   });
 });
