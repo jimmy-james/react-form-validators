@@ -10,21 +10,31 @@
 * phone number for international
 * major credit cards
 * quantity
+* create user
 * currency
 * timezone
 * excluded strings or items or codes
 * create user/password
+* config (default to null):
+*   caseSensitive: bool
+*   inputLabelName: string
+*   min: num
+*   max: num
+*   errorMessage: string
+*   successMessage: string
+*
 * */
 
 const errorMessages = {
   too_short: 'is too short',
   white_space: 'must not contain spaces',
-  trailing_space: 'must not begin with a space',
+  trailing_space: 'must not begin or end with a space',
   required: 'is required',
   not_a_number: 'is not a number',
   not_in_range: 'is not in range',
   exists_input_error: 'alreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
-  exists: 'already exists'
+  exists: 'already exists',
+  email: 'invalid email format'
 };
 
 /* validation methods */
@@ -40,7 +50,7 @@ const containsWhiteSpace = input => (
 );
 
 const containsTrailingSpace = input => {
-  return (input[ 0 ] === ' ') && (input.length > 0) ?
+  return (input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0) ?
     errorMessages.trailing_space :
     null;
 };
@@ -64,10 +74,10 @@ const isNotInRange = (num, config) => {
 };
 
 /* helper methods for alreadyExists */
-const validateArrays = (input, data, label) => {
+const validateArrays = (input, data, config) => {
   let msg = null;
   var recurse = function(array, item) {
-    if (item && item[label] && !Array.isArray(item) && item[label].toLowerCase().trim() === input.toLowerCase().trim()) {
+    if (item && item[config.inputLabelName] && !Array.isArray(item) && item[config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
       msg = errorMessages.exists;
       return;
     }
@@ -83,9 +93,9 @@ const validateArrays = (input, data, label) => {
   return msg;
 };
 
-const validateArrayOfObjects = (input, data, label) => {
+const validateArrayOfObjects = (input, data, config) => {
   for (let i = 0; i < data.length; i++) {
-    if (typeof data[i] === 'object' && data[i][label] && data[i][label].toLowerCase().trim() === input.toLowerCase().trim()) {
+    if (typeof data[i] === 'object' && data[i][config.inputLabelName] && data[i][config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
       return errorMessages.exists;
     }
   }
@@ -105,10 +115,10 @@ const validateArrayOfStrings = (input, data) => {
 const alreadyExists = (input, data, config) => {
   if (Array.isArray(data)) {
     if (Array.isArray(data[0])) {
-      return validateArrays(input, data, config.inputLabelName);
+      return validateArrays(input, data, config);
     }
     else if (typeof data[0] === 'object') {
-      return validateArrayOfObjects(input, data, config.inputLabelName);
+      return validateArrayOfObjects(input, data, config);
     }
     else if (typeof data[0] === 'string') {
       return validateArrayOfStrings(input, data);
@@ -116,6 +126,22 @@ const alreadyExists = (input, data, config) => {
   }
   else {
     console.error(errorMessages.user_exists_input_error);
+  }
+};
+
+const validateEmail = (email, config) => {
+  let isValidEmail;
+  if (config.caseSensitive === true) {
+    isValidEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(email);
+  }
+  else {
+    isValidEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(email);
+  }
+  if (isValidEmail) {
+    return msg;
+  }
+  else {
+    return errorMessages.email;
   }
 };
 

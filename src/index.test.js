@@ -44,12 +44,19 @@ describe('containsWhiteSpace method', () => {
 });
 
 describe('containsTrailingSpace method', () => {
-  let text = ' test';
+  let text = ' test',
+    text2 = 'test ';
   it('should return a message', () => {
     expect(validators.containsTrailingSpace(text)).to.equal(messages.trailing_space);
   });
+  it('should return a message', () => {
+    expect(validators.containsTrailingSpace(text2)).to.equal(messages.trailing_space);
+  });
   it('should return null', () => {
     expect(validators.containsTrailingSpace(text.trim())).to.equal(null);
+  });
+  it('should return null', () => {
+    expect(validators.containsTrailingSpace(text2.trim())).to.equal(null);
   });
 });
 
