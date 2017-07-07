@@ -1,6 +1,6 @@
 'use strict';
 /*
-* remember to validate for special characters
+* validate for special characters
 * validate for case-sensitivity
 * validate password
 * create a config option for messages, special characters, etc
@@ -41,35 +41,37 @@ const errorMessages = {
 const minimumLen = (input, config) => {
   let len = input.length;
   return (len > 0) && (len < config.min) ?
-    errorMessages.too_short :
+    config.errorMessage || errorMessages.too_short :
     null;
 };
 
-const containsWhiteSpace = input => (
-  /\s/g.test(input)
-);
+const containsWhiteSpace = (input, config) => {
+  return /\s/g.test(input) ?
+    config.errorMessage || errorMessages.white_space :
+    null;
+};
 
-const containsTrailingSpace = input => {
+const containsTrailingSpace = (input, config) => {
   return (input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0) ?
-    errorMessages.trailing_space :
+    config.errorMessage || errorMessages.trailing_space :
     null;
 };
 
-const isRequired = input => {
+const isRequired = (input, config) => {
   return !input ?
-    errorMessages.required :
+    config.errorMessage || errorMessages.required :
     null;
 };
 
-const isNotANumber = num => {
+const isNotANumber = (num, config) => {
   return isNaN(num) ?
-    errorMessages.not_a_number :
+    config.errorMessage || errorMessages.not_a_number :
     null;
 };
 
 const isNotInRange = (num, config) => {
   return (num < config.min) || (num > config.max) ?
-    errorMessages.not_in_range :
+    config.errorMessage || errorMessages.not_in_range :
     null;
 };
 
@@ -78,7 +80,7 @@ const validateArrays = (input, data, config) => {
   let msg = null;
   var recurse = function(array, item) {
     if (item && item[config.inputLabelName] && !Array.isArray(item) && item[config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
-      msg = errorMessages.exists;
+      msg = config.errorMessage || errorMessages.exists;
       return;
     }
     for (let i = 0; i < array.length; i++) {
@@ -96,7 +98,7 @@ const validateArrays = (input, data, config) => {
 const validateArrayOfObjects = (input, data, config) => {
   for (let i = 0; i < data.length; i++) {
     if (typeof data[i] === 'object' && data[i][config.inputLabelName] && data[i][config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
-      return errorMessages.exists;
+      return config.errorMessage || errorMessages.exists;
     }
   }
   return null;
@@ -105,7 +107,7 @@ const validateArrayOfObjects = (input, data, config) => {
 const validateArrayOfStrings = (input, data) => {
   for (let i = 0; i < data.length; i++) {
     if (data[i].toLowerCase().trim() === input.toLowerCase().trim()) {
-      return errorMessages.exists;
+      return config.errorMessage || errorMessages.exists;
     }
   }
   return null;
@@ -141,7 +143,7 @@ const validateEmail = (email, config) => {
     return null;
   }
   else {
-    return errorMessages.email;
+    return config.errorMessage || errorMessages.email;
   }
 };
 
