@@ -3,10 +3,8 @@
 * validate for special characters
 * validate for case-sensitivity
 * validate password
-* create a config option for messages, special characters, etc
 * if no config object?
 * accomodate project/application/company name exists
-* email validation
 * phone number for international
 * major credit cards
 * quantity
@@ -21,7 +19,6 @@
 *   min: num
 *   max: num
 *   errorMessage: string
-*   successMessage: string
 *
 * */
 
@@ -34,7 +31,8 @@ const errorMessages = {
   not_in_range: 'is not in range',
   exists_input_error: 'alreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
   exists: 'already exists',
-  email: 'invalid email format'
+  email: 'is invalid email format',
+  phone: 'is invalid phone number format'
 };
 
 /* validation methods */
@@ -42,24 +40,6 @@ const minimumLen = (input, config) => {
   let len = input.length;
   return (len > 0) && (len < config.min) ?
     config.errorMessage || errorMessages.too_short :
-    null;
-};
-
-const containsWhiteSpace = (input, config) => {
-  return /\s/g.test(input) ?
-    config.errorMessage || errorMessages.white_space :
-    null;
-};
-
-const containsTrailingSpace = (input, config) => {
-  return (input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0) ?
-    config.errorMessage || errorMessages.trailing_space :
-    null;
-};
-
-const isRequired = (input, config) => {
-  return !input ?
-    config.errorMessage || errorMessages.required :
     null;
 };
 
@@ -75,7 +55,27 @@ const isNotInRange = (num, config) => {
     null;
 };
 
-/* helper methods for alreadyExists */
+/* must not contain any white space */
+const containsWhiteSpace = (input, config) => {
+  return /\s/g.test(input) ?
+    config.errorMessage || errorMessages.white_space :
+    null;
+};
+
+/* may contain white space - just not at the beginning or end */
+const containsTrailingSpace = (input, config) => {
+  return (input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0) ?
+    config.errorMessage || errorMessages.trailing_space :
+    null;
+};
+
+const isRequired = (input, config) => {
+  return !input ?
+    config.errorMessage || errorMessages.required :
+    null;
+};
+
+/* START alreadyExists helper methods */
 const validateArrays = (input, data, config) => {
   let msg = null;
   var recurse = function(array, item) {
@@ -112,7 +112,7 @@ const validateArrayOfStrings = (input, data) => {
   }
   return null;
 };
-/* END OF alreadyExists helper methods */
+/* END of alreadyExists helper methods */
 
 const alreadyExists = (input, data, config) => {
   if (Array.isArray(data)) {
@@ -139,12 +139,27 @@ const validateEmail = (email, config) => {
   else {
     isValidEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(email);
   }
-  if (isValidEmail) {
-    return null;
-  }
-  else {
-    return config.errorMessage || errorMessages.email;
-  }
+
+  return isValidEmail ?
+    null :
+    config.errorMessage || errorMessages.email;
+};
+
+/*
+  VALID FORMATS:
+* 2125555555
+* (212)-555-5555
+* (212) 555-5555
+* 212-555-5555
+* +1-212-555-5555
+* +1-212-555-5555 ext 77
+* */
+const validateUSPhoneNumber = (num, config) => {
+  let isValidPhoneNum = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/.test(num);
+
+  return isValidPhoneNum ?
+    null :
+    config.errorMessage || errorMessages.phone;
 };
 
 module.exports = {
@@ -156,6 +171,7 @@ module.exports = {
   isNotANumber: isNotANumber,
   isNotInRange: isNotInRange,
   alreadyExists: alreadyExists,
-  validateEmail: validateEmail
+  validateEmail: validateEmail,
+  validateUSPhoneNumber: validateUSPhoneNumber
 };
 
