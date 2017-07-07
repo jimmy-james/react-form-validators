@@ -138,7 +138,7 @@ const validateEmail = (email, config) => {
     isValidEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(email);
   }
   if (isValidEmail) {
-    return msg;
+    return null;
   }
   else {
     return errorMessages.email;
@@ -153,6 +153,7 @@ module.exports = {
   isRequired: isRequired,
   isNotANumber: isNotANumber,
   isNotInRange: isNotInRange,
-  alreadyExists: alreadyExists
+  alreadyExists: alreadyExists,
+  validateEmail: validateEmail
 };
 
