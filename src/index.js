@@ -1,26 +1,4 @@
 'use strict';
-/*
-* validate for special characters
-* validate for case-sensitivity
-* validate password
-* if no config object?
-* accomodate project/application/company name exists
-* phone number for international
-* major credit cards
-* quantity
-* create user
-* currency
-* timezone
-* excluded strings or items or codes
-* create user/password
-* config (default to null):
-*   caseSensitive: bool
-*   inputLabelName: string
-*   min: num
-*   max: num
-*   errorMessage: string
-*
-* */
 
 const errorMessages = {
   too_short: 'is too short',
