@@ -5,11 +5,17 @@ var messages = require('./index').errorMessages;
 var beforeEach = require('mocha').beforeEach;
 
 describe('isRequired method', () => {
+  const config = {
+    errorMessage: 'nonono'
+  };
   it('should return null', () => {
     expect(validators.isRequired('input')).to.equal(null);
   });
   it('should return "isRequired"', () => {
     expect(validators.isRequired('')).to.equal(messages.required);
+  });
+  it('should return "nonono"', () => {
+    expect(validators.isRequired('', config)).to.equal(config.errorMessage);
   });
 });
 
@@ -36,10 +42,10 @@ describe('minimumLen method', () => {
 describe('containsWhiteSpace method', () => {
   let input = 'tes t';
   it('should return a message', () => {
-    expect(validators.containsWhiteSpace(input)).to.equal(true);
+    expect(validators.containsWhiteSpace(input)).to.equal(messages.white_space);
   });
   it('should return null', () => {
-    expect(validators.containsWhiteSpace('test')).to.equal(false);
+    expect(validators.containsWhiteSpace('test')).to.equal(null);
   });
 });
 

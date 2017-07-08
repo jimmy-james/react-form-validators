@@ -16,41 +16,77 @@ const errorMessages = {
 /* validation methods */
 const minimumLen = (input, config) => {
   let len = input.length;
-  return (len > 0) && (len < config.min) ?
-    config.errorMessage || errorMessages.too_short :
-    null;
+  if (len > 0 && len < config.min) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.too_short;
+    }
+  }
+  return null;
 };
 
 const isNotANumber = (num, config) => {
-  return isNaN(num) ?
-    config.errorMessage || errorMessages.not_a_number :
-    null;
+  if (isNaN(num)) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.not_a_number;
+    }
+  }
+  return null;
 };
 
 const isNotInRange = (num, config) => {
-  return (num < config.min) || (num > config.max) ?
-    config.errorMessage || errorMessages.not_in_range :
-    null;
+  if (num < config.min || num > config.max) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.not_in_range;
+    }
+  }
+  return null;
 };
 
 /* must not contain any white space */
 const containsWhiteSpace = (input, config) => {
-  return /\s/g.test(input) ?
-    config.errorMessage || errorMessages.white_space :
-    null;
+  if (/\s/g.test(input)) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.white_space;
+    }
+  }
+  return null;
 };
 
 /* may contain white space - just not at the beginning or end */
 const containsTrailingSpace = (input, config) => {
-  return (input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0) ?
-    config.errorMessage || errorMessages.trailing_space :
-    null;
+  if ((input[ 0 ] === ' ') && (input.length > 0) || (input[ input.length -1 ] === ' ') && (input.length > 0)) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.trailing_space;
+    }
+  }
+  return null;
 };
 
 const isRequired = (input, config) => {
-  return !input ?
-    config.errorMessage || errorMessages.required :
-    null;
+  if (!input) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.required;
+    }
+  }
+  return null;
 };
 
 /* START alreadyExists helper methods */
@@ -58,7 +94,12 @@ const validateArrays = (input, data, config) => {
   let msg = null;
   var recurse = function(array, item) {
     if (item && item[config.inputLabelName] && !Array.isArray(item) && item[config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
-      msg = config.errorMessage || errorMessages.exists;
+      if (config && config.errorMessage) {
+        msg = config.errorMessage;
+      }
+      else {
+        msg = errorMessages.exists;
+      }
       return;
     }
     for (let i = 0; i < array.length; i++) {
@@ -76,7 +117,12 @@ const validateArrays = (input, data, config) => {
 const validateArrayOfObjects = (input, data, config) => {
   for (let i = 0; i < data.length; i++) {
     if (typeof data[i] === 'object' && data[i][config.inputLabelName] && data[i][config.inputLabelName].toLowerCase().trim() === input.toLowerCase().trim()) {
-      return config.errorMessage || errorMessages.exists;
+      if (config && config.errorMessage) {
+        return config.errorMessage;
+      }
+      else {
+        return errorMessages.exists;
+      }
     }
   }
   return null;
@@ -85,7 +131,12 @@ const validateArrayOfObjects = (input, data, config) => {
 const validateArrayOfStrings = (input, data, config) => {
   for (let i = 0; i < data.length; i++) {
     if (data[i].toLowerCase().trim() === input.toLowerCase().trim()) {
-      return config.errorMessage || errorMessages.exists;
+      if (config && config.errorMessage) {
+        return config.errorMessage;
+      }
+      else {
+        return errorMessages.exists;
+      }
     }
   }
   return null;
@@ -118,9 +169,15 @@ const validateEmail = (email, config) => {
     isValidEmail = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/.test(email);
   }
 
-  return isValidEmail ?
-    null :
-    config.errorMessage || errorMessages.email;
+  if (isValidEmail) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.email;
+    }
+  }
+  return null;
 };
 
 /*
@@ -135,9 +192,15 @@ const validateEmail = (email, config) => {
 const validateUSPhoneNumber = (num, config) => {
   let isValidPhoneNum = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/.test(num);
 
-  return isValidPhoneNum ?
-    null :
-    config.errorMessage || errorMessages.phone;
+  if (isValidPhoneNum) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.phone;
+    }
+  }
+  return null;
 };
 
 module.exports = {
