@@ -31,8 +31,8 @@ const errorMessages = {
   not_in_range: 'is not in range',
   exists_input_error: 'alreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
   exists: 'already exists',
-  email: 'is invalid email format',
-  phone: 'is invalid phone number format'
+  email: 'is invalid e-mail format',
+  phone: 'is invalid U.S. phone number'
 };
 
 /* validation methods */
@@ -104,7 +104,7 @@ const validateArrayOfObjects = (input, data, config) => {
   return null;
 };
 
-const validateArrayOfStrings = (input, data) => {
+const validateArrayOfStrings = (input, data, config) => {
   for (let i = 0; i < data.length; i++) {
     if (data[i].toLowerCase().trim() === input.toLowerCase().trim()) {
       return config.errorMessage || errorMessages.exists;
