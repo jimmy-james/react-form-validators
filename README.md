@@ -66,7 +66,7 @@
     validateEmail(email [, configObj])
     // if email format is invalid, will return 'is invalid e-mail format' by default
 ````
-- 1.9 The **validateEmail** method takes input as the first argument and an *optional* config object as a second argument.
+- 1.9 The **validateUSPhoneNumber** method takes input as the first argument and an *optional* config object as a second argument.
 ````
     validateUSPhoneNumber(number [, configObj])
     // if number is not a valid U.S. phone number, will return 'is invalid U.S. phone number' by default
