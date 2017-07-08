@@ -149,7 +149,7 @@ class InputField extends Component {
       errorNode = <p>{ errorMsg }</p>
     }
 
-    /* the node below will render only if the method returns a message */
+    /* the errorNode below will render only if the method returns a message */
     return (
       <div>
         <input onChange={ this.handleChange } value={ this.state } />
