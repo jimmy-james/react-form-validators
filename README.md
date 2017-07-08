@@ -83,9 +83,13 @@
 ````
 - ... And there's more to come!
 
+<a href="#top">Back to top</a>
+
 ## Configurations
 
 - Every method can handle a config object with the errorMessage (String) property for custom messages.
+
+<a href="#top">Back to top</a>
 
 ## React Validation Approach
 
@@ -148,6 +152,4 @@ class InputField extends Component {
 export default InputField;
 
 ````
-
-
-
+<a href="#top">Back to top</a>
