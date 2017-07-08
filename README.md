@@ -114,11 +114,22 @@ class InputField extends Component {
   render() {
     let { value } = this.state,
         errorMsg,
-        errorNode;
+        errorNode,
+        config = {};
     /* Loop over methods, save its return value to errorMsg variable */
     methods.some(method => {
-      errorMsg = method(value);
-      return errorMsg;
+      if (method === isNotInRange) {
+        config = {
+          min: 3,
+          max: 7
+        }
+        errorMsg = method(value, config);
+        return errorMsg;
+      }
+      else {
+        errorMsg = method(value);
+        return errorMsg;
+      }
     });
     /* if the method returns a message, render it to a 'p' tag */
     if (errorMsg) {
