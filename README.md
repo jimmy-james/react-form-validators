@@ -90,7 +90,53 @@
 ## React Validation Approach
 
 - *Install* and *import* **react-form-validators**
+````
+import { Component } from 'react';
+/* import validator methods */
+import { containsWhiteSpace, isNotInRange } from 'react-form-validators';
+/* make them iterable */
+const methods = [containsWhiteSpace, isNotInRange];
 
+class InputField extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      value: ''
+    }
+  }
+  /* Example: capture input value in component state */
+  handleChange(event) {
+    this.setState({
+      value: event.target.value
+    });
+  }
+
+  render() {
+    let { value } = this.state,
+        errorMsg,
+        errorNode;
+    /* Loop over methods, save its return value to errorMsg variable */
+    methods.some(method => {
+      errorMsg = method(value);
+      return errorMsg;
+    });
+    /* if the method returns a message, render it to a 'p' tag */
+    if (errorMsg) {
+      errorNode = <p>{ errorMsg }</p>
+    }
+
+    /* the node below will render only if the method returns a message */
+    return (
+      <div>
+        <input onChange={ this.handleChange } value={ this.state } />
+        { errorNode }
+      </div>
+    );
+  }
+}
+export default InputField;
+
+````
 
 
 
