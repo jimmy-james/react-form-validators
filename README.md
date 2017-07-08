@@ -1,8 +1,14 @@
 # react-form-validators
+
 ##### *Lightweight form validation library and methodology for ReactJS*
 
 ##### To Install
-``npm install --save react-form-validators``
+````
+    npm install --save react-form-validators
+````
+
+[www.npm.com/package/react-form-validators](https://www.npmjs.com/package/react-form-validators)
+
 
 ## Table of Contents
 
