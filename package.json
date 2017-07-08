@@ -15,7 +15,9 @@
     "form",
     "validation",
     "forms",
-    "validator"
+    "validators",
+    "validate",
+    "javascript"
   ],
   "author": "jimbot <jimkim777@gmail.com> (http://www.jameskim.io/)",
   "license": "MIT",
