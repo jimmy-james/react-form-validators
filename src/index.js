@@ -10,7 +10,8 @@ const errorMessages = {
   exists_input_error: 'alreadyExists validator only accepts as the second argument: multi-dimensional array, array with objects, and array with strings',
   exists: 'already exists',
   email: 'is invalid e-mail format',
-  phone: 'is invalid U.S. phone number'
+  phone: 'is invalid U.S. phone number',
+  zip_code: 'is invalid U.S. zip code'
 };
 
 /* validation methods */
@@ -191,13 +192,25 @@ const validateEmail = (email, config) => {
 * */
 const validateUSPhoneNumber = (num, config) => {
   let isValidPhoneNum = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/.test(num);
-
   if (isValidPhoneNum) {
     if (config && config.errorMessage) {
       return config.errorMessage;
     }
     else {
       return errorMessages.phone;
+    }
+  }
+  return null;
+};
+
+const validateUSZipCode = (code, config) => {
+  let isValid = /(^\d{5}$)|(^\d{5}-\d{4}$)/.test(code);
+  if (isValid) {
+    if (config && config.errorMessage) {
+      return config.errorMessage;
+    }
+    else {
+      return errorMessages.zip_code;
     }
   }
   return null;
@@ -213,6 +226,7 @@ module.exports = {
   isNotInRange: isNotInRange,
   alreadyExists: alreadyExists,
   validateEmail: validateEmail,
-  validateUSPhoneNumber: validateUSPhoneNumber
+  validateUSPhoneNumber: validateUSPhoneNumber,
+  validateUSZipCode: validateUSZipCode
 };
 
