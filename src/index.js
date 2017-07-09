@@ -11,7 +11,7 @@ const errorMessages = {
   exists: 'already exists',
   email: 'is invalid e-mail format',
   phone: 'is invalid U.S. phone number',
-  zip_code: 'is invalid U.S. zip code'
+  zip_code: 'is not a U.S. zip code'
 };
 
 /* validation methods */
