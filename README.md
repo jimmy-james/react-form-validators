@@ -102,7 +102,7 @@ validateUSPhoneNumber(number [, configObj])
 
 ## Configurations
 
-- Every method can handle a config object with the errorMessage (String) property for custom messages.
+- Every method can handle a config object with the errorMessage property (String type) for custom messages.
 
 <a href="#top">Back to top</a>
 
@@ -135,9 +135,11 @@ class InputField extends Component {
         errorMsg,
         errorNode,
         config = {};
-    /* Loop over methods, save its return value to errorMsg variable */
+
+    /* Loop over methods, then save its return value to errorMsg variable */
     methods.some(method => {
       if (method === isNotInRange) {
+      /* Use a config object for methods like isNotInRange */
         config = {
           min: 3,
           max: 7
@@ -150,12 +152,11 @@ class InputField extends Component {
         return errorMsg;
       }
     });
-    /* if the method returns a message, render it to a 'p' tag */
+    /* if the method returns a message, render it to a 'p', span tag, or div */
     if (errorMsg) {
       errorNode = <p>{ errorMsg }</p>
     }
-
-    /* the errorNode below will render only if the method returns a message */
+    /* the errorNode below will render only if the method returned a message */
     return (
       <div>
         <input onChange={ this.handleChange.bind(this) } value={ this.state.value } />
