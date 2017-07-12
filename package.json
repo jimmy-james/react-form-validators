@@ -2,9 +2,11 @@
   "name": "react-form-validators",
   "version": "1.1.1",
   "description": "form validators for react applications",
-  "main": "src/index.js",
+  "main": "dist/react-form-validators.js",
+  "module": "src/index.js",
   "scripts": {
-    "test": "mocha src/index.test.js -w"
+    "test": "mocha src/index.test.js -w",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -27,8 +29,13 @@
   "homepage": "https://github.com/jimmy-james/react-form-validators#readme",
   "devDependencies": {
     "babel-cli": "6.24.1",
+    "babel-core": "6.25.0",
+    "babel-loader": "7.1.1",
     "babel-preset-es2015": "6.24.1",
     "chai": "4.0.2",
     "mocha": "3.4.2"
+  },
+  "dependencies": {
+    "webpack": "3.2.0"
   }
 }
